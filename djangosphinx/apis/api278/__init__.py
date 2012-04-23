@@ -788,6 +788,9 @@ class SphinxClient:
 		for doc in docs:
 			if isinstance(doc,unicode):
 				doc = doc.encode('utf-8')
+			if isinstance(doc, (int, long)):
+				doc = str(doc)
+
 			assert(isinstance(doc, str))
 			req.append(pack('>L', len(doc)))
 			req.append(doc)
@@ -799,7 +802,7 @@ class SphinxClient:
 
 		# add header
 		req = pack('>2HL', SEARCHD_COMMAND_EXCERPT, VER_COMMAND_EXCERPT, length)+req
-		wrote = sock.send(req)
+		wrote = sock.send(req) #not used?
 
 		response = self._GetResponse(sock, VER_COMMAND_EXCERPT )
 		if not response:
